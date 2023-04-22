@@ -16,38 +16,34 @@
         }
 
         h2 {
-
-            display:none;
+            display: none;
         }
     </style>
 
-<script>
+    <script>
         // Existing JavaScript code
-
-        // Typewriter effect function
-        function typeWriter(element, text, index = 0, delay = 100, callback) {
-            if (index < text.length) {
-                element.value += text.charAt(index);
+        let stopTyping = false;
+        function typeWriter(element, text, index, interval, callback) {
+            if (index < text.length && !stopTyping) {
+                element.value += text[index];
                 index++;
-                setTimeout(() => typeWriter(element, text, index, delay, callback), delay);
-            } else {
+                setTimeout(() => typeWriter(element, text, index, interval, callback), interval);
+            } else if (!stopTyping) {
                 callback();
             }
         }
 
-        // DeleteWriter effect function
-        function deleteWriter(element, delay = 100, callback) {
-            if (element.value.length > 0) {
+        function deleteWriter(element, interval, callback) {
+            if (element.value.length > 0 && !stopTyping) {
                 element.value = element.value.slice(0, -1);
-                setTimeout(() => deleteWriter(element, delay, callback), delay);
-            } else {
+                setTimeout(() => deleteWriter(element, interval, callback), interval);
+            } else if (!stopTyping) {
                 callback();
             }
         }
 
-        // Loop through the terms and apply typewriter effect
         function loopTypewriter(element, terms, termIndex = 0) {
-            if (termIndex < terms.length) {
+            if (termIndex < terms.length && !stopTyping) {
                 const term = terms[termIndex];
                 typeWriter(element, term, 0, 100, () => {
                     setTimeout(() => {
@@ -56,25 +52,40 @@
                         });
                     }, 1500);
                 });
-            } else {
+            } else if (!stopTyping) {
                 loopTypewriter(element, terms, 0);
             }
         }
 
-        // Apply typewriter effect to "More Details" field
+        // Apply typewriter effect to "More Details" field and clear on focus
         $(document).ready(function () {
             const subjectField = document.getElementById('subject');
             const terms = ["help with my website", "fix a buggy script", "migrate data"];
+            let isFirstFocus = true;
+
             loopTypewriter(subjectField, terms);
+
+            subjectField.addEventListener('focus', () => {
+                stopTyping = true;
+                if (isFirstFocus) {
+                    subjectField.value = '';
+                    isFirstFocus = false;
+                }
+            });
         });
     </script>
+
+
+
 </head>
-
-
 
 <body>
     <h1>Submit a support ticket</h1>
     <form id="support-ticket-form">
+
+        <label for="subject">How can we help?</label>
+        <input type="text" id="subject" name="subject" required>
+        <br>
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>
         <br>
@@ -83,9 +94,6 @@
         <br>
         <label for="issue">Issue:</label>
         <input type="text" id="issue" name="issue" required>
-        <br>
-        <label for="subject">More Details:</label>
-        <input type="text" id="subject" name="subject" required>
         <br>
         <button type="submit">Submit</button>
     </form>
