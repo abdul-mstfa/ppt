@@ -8,20 +8,26 @@ if (isset($_POST['issue'])) {
     $whmcs_url = 'https://legacygroups.com/billing/includes/api.php';
     
     // Replace with your client, department, and subject information
-    $client_id = 76;
+    #$client_id = 76;
     $department_id = 2;
-    $subject = 'Support Request';
-
+    $subject = 'Technical Support'; #$_POST['subject'];
+    #$issue = $_POST['issue'];
+    $email = $_POST['email'];
+    $name = $_POST['name'];
+    
     $postData = array(
         'identifier' => $api_identifier,
         'secret' => $api_secret,
         'action' => 'OpenTicket',
-        'clientid' => $client_id,
+        #'clientid' => $client_id,
         'deptid' => $department_id,
         'subject' => $subject,
         'message' => $issue,
         'priority' => 'Medium',
         'responsetype' => 'json',
+        'clientemail' => $email,
+        'email' => $email,
+        'name' => $name,
     );
     
     $ch = curl_init();
