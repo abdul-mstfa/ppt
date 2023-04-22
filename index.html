@@ -21,7 +21,6 @@
     </style>
 
     <script>
-        // Existing JavaScript code
         let stopTyping = false;
         function typeWriter(element, text, index, interval, callback) {
             if (index < text.length && !stopTyping) {
@@ -57,25 +56,31 @@
             }
         }
 
-        // Apply typewriter effect to "More Details" field and clear on focus
         $(document).ready(function () {
             const subjectField = document.getElementById('subject');
             const terms = ["help with my website", "fix a buggy script", "migrate data"];
-            let isFirstFocus = true;
+            let shouldClearOnFocus = true;
 
             loopTypewriter(subjectField, terms);
 
             subjectField.addEventListener('focus', () => {
                 stopTyping = true;
-                if (isFirstFocus) {
+                if (shouldClearOnFocus) {
                     subjectField.value = '';
-                    isFirstFocus = false;
+                }
+            });
+
+            subjectField.addEventListener('blur', () => {
+                if (subjectField.value === '') {
+                    shouldClearOnFocus = true;
+                    stopTyping = false;
+                    loopTypewriter(subjectField, terms);
+                } else {
+                    shouldClearOnFocus = false;
                 }
             });
         });
     </script>
-
-
 
 </head>
 
