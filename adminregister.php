@@ -13,13 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
 
     $postData = array(
-        'action' => 'AddAdmin',
+        'action' => 'ClientAdd',
         'username' => $email, // Use email as the username
         'password2' => $password,
         'firstname' => $name,
         'lastname' => '',
         'email' => $email,
         'roleid' => 4, // Assign the appropriate role ID for support administrators
+        'notes' => "Custom Signup: $custom_signup",
     );
 
     $response = $whmcs->callAPI($postData);
