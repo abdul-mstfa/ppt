@@ -20,6 +20,54 @@
             display:none;
         }
     </style>
+
+<script>
+        // Existing JavaScript code
+
+        // Typewriter effect function
+        function typeWriter(element, text, index = 0, delay = 100, callback) {
+            if (index < text.length) {
+                element.value += text.charAt(index);
+                index++;
+                setTimeout(() => typeWriter(element, text, index, delay, callback), delay);
+            } else {
+                callback();
+            }
+        }
+
+        // DeleteWriter effect function
+        function deleteWriter(element, delay = 100, callback) {
+            if (element.value.length > 0) {
+                element.value = element.value.slice(0, -1);
+                setTimeout(() => deleteWriter(element, delay, callback), delay);
+            } else {
+                callback();
+            }
+        }
+
+        // Loop through the terms and apply typewriter effect
+        function loopTypewriter(element, terms, termIndex = 0) {
+            if (termIndex < terms.length) {
+                const term = terms[termIndex];
+                typeWriter(element, term, 0, 100, () => {
+                    setTimeout(() => {
+                        deleteWriter(element, 100, () => {
+                            loopTypewriter(element, terms, termIndex + 1);
+                        });
+                    }, 1500);
+                });
+            } else {
+                loopTypewriter(element, terms, 0);
+            }
+        }
+
+        // Apply typewriter effect to "More Details" field
+        $(document).ready(function () {
+            const subjectField = document.getElementById('subject');
+            const terms = ["help with my website", "fix a buggy script", "migrate data"];
+            loopTypewriter(subjectField, terms);
+        });
+    </script>
 </head>
 
 
