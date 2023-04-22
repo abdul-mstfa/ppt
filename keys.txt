@@ -1,3 +1,11 @@
+Open ticket:
+
 ID: MJ6x12vcR3MU9KYVWR7kbMqsw9AQmMJu
 
 Secret:ub2CSjvkYGtnGEU0nBDBfCG5ST3e86mq
+
+Create tech support user:
+
+ID: gJ2Su6jwlC144dYEW3kyuLALjOloriT1
+
+Secret: iJmT7zwf9PqqFBVNQ1FN6Fax1d2sPvGZ
