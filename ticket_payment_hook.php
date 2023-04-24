@@ -1,7 +1,7 @@
 <?php
 use WHMCS\Database\Capsule;
 
-$allowed_admin_roles = [4];
+$allowed_admin_roles = [1, 2, 3, 4];
 
 if (!defined("WHMCS")) {
     die("This file cannot be accessed directly");
@@ -16,20 +16,20 @@ function getAdminRoleId($admin_id) {
             return null;
         }
     } catch (Exception $e) {
-        logActivity("Error fetching admin role: " . $e->getMessage());
+        logSystem("Error fetching admin role: " . $e->getMessage());
         return null;
     }
 }
 
-add_hook('TicketClose', 1, function($vars) use ($allowed_admin_roles) {
+add_hook('TicketClose', 0, function($vars) use ($allowed_admin_roles) {
 
 
-    logActivity("TicketClose hook started"); //for debug in the system log
+    logSystem("TicketClose hook started"); //for debug in the system log
 
     $admin_id = $vars['adminid'];
     $ticket_id = $vars['ticketid'];
 
-    logActivity("got the admin and ticket id's"); //for debug in the system log
+    logSystem("got the admin and ticket id's"); //for debug in the system log
 
     // Get the admin's role ID
     $admin_role_id = getAdminRoleId($admin_id);
@@ -47,11 +47,11 @@ add_hook('TicketClose', 1, function($vars) use ($allowed_admin_roles) {
     try {
         $pdo = Capsule::connection()->getPdo();
     } catch (Exception $e) {
-        logActivity("Error connecting to database: " . $e->getMessage());
+        logSystem("Error connecting to database: " . $e->getMessage());
         return;
     }
 
-    logActivity("insertion into db"); //for debug in the system log
+    logSystem("insertion into db"); //for debug in the system log
 
     // Insert closed ticket information into a custom table
     try {
@@ -59,8 +59,8 @@ add_hook('TicketClose', 1, function($vars) use ($allowed_admin_roles) {
         $statement = $pdo->prepare($sql);
         $statement->execute([$admin_id, $ticket_id, $payment_per_ticket]);
     } catch (Exception $e) {
-        logActivity("Error inserting ticket payment data: " . $e->getMessage());
+        logSystem("Error inserting ticket payment data: " . $e->getMessage());
     }
 
-    logActivity("TicketClose hook has run. Posted Vars: ". print_r($vars, true));
+    logSystem("TicketClose hook has run. Posted Vars: ". print_r($vars, true));
 });
