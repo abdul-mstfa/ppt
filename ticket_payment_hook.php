@@ -41,6 +41,20 @@ add_hook('TicketClose', 0, function($vars) use ($allowed_admin_roles) {
         return;
     }
 
+    try {
+        $insertedId = Capsule::table('tbl_ticket_payments')->insertGetId([
+            'ticket_id' => $ticketId,
+            'admin_id' => $adminId,
+            'amount' => 10,
+            'created_at' => Capsule::raw('NOW()'),
+            'updated_at' => Capsule::raw('NOW()'),
+        ]);
+
+        logActivity("Ticket Payment hook executed: Inserted record with ID " . $insertedId);
+    } catch (\Exception $e) {
+        logActivity("Ticket Payment hook error: " . $e->getMessage());
+    }
+    
     // Set the payment amount per closed ticket
     $payment_per_ticket = 10;
 
