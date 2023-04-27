@@ -16,7 +16,7 @@ function getAdminRoleId($admin_id) {
             return null;
         }
     } catch (Exception $e) {
-        logSystem("Error fetching admin role: " . $e->getMessage());
+        logActivity("Error fetching admin role: " . $e->getMessage());
         return null;
     }
 }
@@ -24,12 +24,12 @@ function getAdminRoleId($admin_id) {
 add_hook('TicketClose', 0, function($vars) use ($allowed_admin_roles) {
 
 
-    logSystem("TicketClose hook started"); //for debug in the system log
+    logActivity("TicketClose hook started"); //for debug in the system log
 
     $admin_id = $vars['adminid'];
     $ticket_id = $vars['ticketid'];
 
-    logSystem("got the admin and ticket id's"); //for debug in the system log
+    logActivity("got the admin and ticket id's"); //for debug in the system log
 
     // Get the admin's role ID
     $admin_role_id = getAdminRoleId($admin_id);
@@ -47,11 +47,11 @@ add_hook('TicketClose', 0, function($vars) use ($allowed_admin_roles) {
     try {
         $pdo = Capsule::connection()->getPdo();
     } catch (Exception $e) {
-        logSystem("Error connecting to database: " . $e->getMessage());
+        logActivity("Error connecting to database: " . $e->getMessage());
         return;
     }
 
-    logSystem("insertion into db"); //for debug in the system log
+    logActivity("insertion into db"); //for debug in the system log
 
     // Insert closed ticket information into a custom table
     try {
@@ -59,8 +59,8 @@ add_hook('TicketClose', 0, function($vars) use ($allowed_admin_roles) {
         $statement = $pdo->prepare($sql);
         $statement->execute([$admin_id, $ticket_id, $payment_per_ticket]);
     } catch (Exception $e) {
-        logSystem("Error inserting ticket payment data: " . $e->getMessage());
+        logActivity("Error inserting ticket payment data: " . $e->getMessage());
     }
 
-    logSystem("TicketClose hook has run. Posted Vars: ". print_r($vars, true));
+    logActivity("TicketClose hook has run. Posted Vars: ". print_r($vars, true));
 });

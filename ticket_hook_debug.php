@@ -7,5 +7,5 @@ if (!defined("WHMCS")) {
 }
 
 add_hook('TicketClose', 1, function($vars) {
-    logSystem("Simple TicketClose hook executed");
+    logActivity("Simple TicketClose hook executed");
 });
