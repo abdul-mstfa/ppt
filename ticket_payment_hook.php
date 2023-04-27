@@ -1,7 +1,7 @@
 <?php
 use WHMCS\Database\Capsule;
 
-$allowed_admin_roles = [1, 2, 3, 4];
+$allowed_admin_roles = [4];
 
 if (!defined("WHMCS")) {
     die("This file cannot be accessed directly");
@@ -29,10 +29,12 @@ add_hook('TicketClose', 0, function($vars) use ($allowed_admin_roles) {
     $admin_id = $vars['adminid'];
     $ticket_id = $vars['ticketid'];
 
-    logActivity("got the admin and ticket id's"); //for debug in the system log
+    logActivity("got the admin and ticket id's. admin id:", print($admin_id)); //for debug in the system log; improper syntaxt -> not printing the variable
 
     // Get the admin's role ID
     $admin_role_id = getAdminRoleId($admin_id);
+
+    logActivity("got the admin role id: ", print($admin_role_id)); //for debug in the system log; improper syntaxt -> not printing the variable
 
     // Check if the admin's role is allowed
     if (!in_array($admin_role_id, $allowed_admin_roles)) {
