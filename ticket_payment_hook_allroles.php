@@ -7,8 +7,8 @@ if (!defined("WHMCS")) {
 use WHMCS\Database\Capsule;
 
 add_hook('TicketClose', 1, function ($vars) {
-    $ticketId = $vars['ticketId'];
-    $adminId = $vars['adminId'];
+    $ticketId = $vars['ticketid'];
+    $adminId = $vars['adminid'];
 
     try {
         $insertedId = Capsule::table('tbl_ticket_payments')->insertGetId([
